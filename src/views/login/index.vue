@@ -68,10 +68,20 @@ export default {
   methods: {
     // 提交登录表单
     submitLogin () {
-      this.$refs.myform.validate(function (isok) {
+      this.$refs.myform.validate((isok) => {
         // validate 是一个方法 => 方法中传入的一个函数 两个校验参数  是否校验成功/未校验成功的字段
         if (isok) {
-          console.log(1)
+          this.$axios({
+            url: '/authorizations',
+            method: 'post',
+            data: this.loginForm
+          }).then(res => {
+            console.log(res)
+            // 设置令牌到本地储存
+            window.localStorage.setItem('userInfo', res.data.data.token)
+            // 跳转页面到home 用this.$router
+            this.$router.push('/home')
+          })
         }
       })
     }
