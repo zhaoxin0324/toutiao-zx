@@ -76,7 +76,7 @@ export default {
             method: 'post',
             data: this.loginForm
           }).then(res => {
-            console.log(res)
+            // console.log(res)
             // 设置令牌到本地储存
             window.localStorage.setItem('userInfo', res.data.data.token)
             // 跳转页面到home 用this.$router
@@ -94,7 +94,6 @@ export default {
   }
 }
 </script>
-
 <style lang="less" scoped>
   .loginBgc{
     background-image: url('../../assets/img/login_bg.jpg');

@@ -2,7 +2,7 @@
 <!-- 全局容器 -->
   <el-container>
     <!-- 左侧边栏 -->
-    <el-aside>
+    <el-aside style="width:231px">
       <layout-aside></layout-aside>
     </el-aside>
     <!-- 右侧容器 -->
@@ -11,7 +11,9 @@
       <el-header>
         <layout-header></layout-header>
       </el-header>
-      <el-main>身</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
