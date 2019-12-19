@@ -41,8 +41,9 @@ export default {}
 <style lang="less" scoped>
 .layout-aside {
   background-color: #323745;
-  min-height: 100vh;
+  // min-height: 100vh;
   width: 230px;
+  overflow: hidden;
   .title {
     text-align: center;
     padding: 10px 0;
