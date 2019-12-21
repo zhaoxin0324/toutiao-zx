@@ -35,15 +35,15 @@ export default {
     }
   },
   created () {
-    let token = window.localStorage.getItem('userInfo') // 获取令牌
+    // let token = window.localStorage.getItem('userInfo') // 获取令牌
     // 查询数据
     this.$axios({
       url: '/user/profile',
-      methods: 'get',
+      methods: 'get'
       //   headers参数
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      // headers: {
+      //   Authorization: `Bearer ${token}` 在自定义axios文件中  设置拦截器 添加到请求配置文件config中了
+      // }
     }).then(result => {
       this.userInfo = result.data.data // 获取用户个人信息
     })
