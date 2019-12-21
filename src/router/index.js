@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login'
 import Home2 from '../views/home/home.vue'
+import Comment from '../views/comment'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -15,6 +16,9 @@ const routes = [{
   children: [{
     path: '', // 二级路由什么都不写 作为一级路由的默认显示组件
     component: Home2
+  }, {
+    path: 'comment',
+    component: Comment
   }]
 }, {
   path: '/login',
