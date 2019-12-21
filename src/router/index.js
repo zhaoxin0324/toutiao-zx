@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login'
 import Home2 from '../views/home/home.vue'
-import Comment from '../views/comment'
+// import Comment from '../views/comment'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -18,7 +18,7 @@ const routes = [{
     component: Home2
   }, {
     path: 'comment',
-    component: Comment
+    component: () => import('../views/comment') // 按需加载
   }]
 }, {
   path: '/login',
