@@ -78,16 +78,16 @@ export default {
           }).then(res => {
             // console.log(res)
             // 设置令牌到本地储存
-            window.localStorage.setItem('userInfo', res.data.data.token)
+            window.localStorage.setItem('userInfo', res.data.token)
             // 跳转页面到home 用this.$router
             this.$router.push('/home')
-          }).catch(() => {
-            // 设置失败的弹窗信息 element-ui提供的方法  通过 $message设置
-            this.$message({
-              message: '不正确',
-              type: 'warning'
-            })
-          })
+          })// .catch(() => {
+          // 设置失败的弹窗信息 element-ui提供的方法  通过 $message设置
+          //   this.$message({
+          //     message: '不正确',
+          //     type: 'warning'
+          //   })
+          // })
         }
       })
     }

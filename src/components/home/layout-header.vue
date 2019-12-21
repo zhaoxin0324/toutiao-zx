@@ -45,7 +45,7 @@ export default {
       //   Authorization: `Bearer ${token}` 在自定义axios文件中  设置拦截器 添加到请求配置文件config中了
       // }
     }).then(result => {
-      this.userInfo = result.data.data // 获取用户个人信息
+      this.userInfo = result.data // 获取用户个人信息
     })
   },
   methods: {
