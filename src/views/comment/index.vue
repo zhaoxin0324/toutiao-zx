@@ -15,10 +15,24 @@
       <el-table-column label="操作">
         <template slot-scope="obj">
           <el-button type="text" size="small">修改</el-button>
-          <el-button type="text" size="small" @click="changeStatus(obj.row)">{{ obj.row.comment_status ? '关闭评论' : '打开评论' }}</el-button>
-        </template>                                             <!-- 将每行数据的传入方法中 -->
+          <el-button
+            type="text"
+            size="small"
+            @click="changeStatus(obj.row)"
+          >{{ obj.row.comment_status ? '关闭评论' : '打开评论' }}</el-button>
+        </template>
+        <!-- 将每行数据的传入方法中 -->
       </el-table-column>
     </el-table>
+    <!-- 插入分页组件 外层套一个el-row 容易布局 -->
+    <el-row type="flex" justify="center" style="height:80px" align="middle">
+      <el-pagination
+      background layout="prev, pager, next"
+      :total="page.total"
+      :pageSize="page.pageSize"
+      :currentPage="page.currentPage"
+      @current-change="changePage"></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -26,10 +40,20 @@
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        total: 0, // 数据总条数
+        pageSize: 10, // 默认每页10条
+        currentPage: 1 // 当前页数
+      }
     }
   },
   methods: {
+    changePage (newPage) {
+      // 改变currentPage的值，调用接口
+      this.page.currentPage = newPage
+      this.getComment()
+    },
     changeStatus (row) {
       // 需要用到状态类型,obj.row.comment_status 传递参数 根据当前状态获取需要改成的状态
       let mess = row.comment_status ? '关闭' : '打开'
@@ -43,7 +67,7 @@ export default {
           url: '/comments/status',
           params: { article_id: row.id.toString() },
           data: { allow_comment: !row.comment_status }
-        }).then((res) => {
+        }).then(res => {
           // 提示信息
           this.$message({
             type: 'success',
@@ -58,9 +82,10 @@ export default {
       this.loading = true
       this.$axios({
         url: '/articles',
-        params: { response_type: 'comment' }
+        params: { response_type: 'comment', page: this.page.currentPage }
       }).then(res => {
         console.log(res)
+        this.page.total = res.data.total_count // 获取文章总条数
         this.list = res.data.results // 获取评论列表数据给本身data
         this.loading = false
       })
