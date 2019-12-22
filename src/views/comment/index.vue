@@ -84,7 +84,7 @@ export default {
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.page.total = res.data.total_count // 获取文章总条数
         this.list = res.data.results // 获取评论列表数据给本身data
         this.loading = false
