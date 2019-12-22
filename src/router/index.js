@@ -19,6 +19,9 @@ const routes = [{
   }, {
     path: 'comment',
     component: () => import('../views/comment') // 按需加载
+  }, {
+    path: 'material',
+    component: () => import('../views/material') // 素材管理按需加载
   }]
 }, {
   path: '/login',
