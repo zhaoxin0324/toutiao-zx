@@ -23,7 +23,7 @@ axios.defaults.transformResponse = [function (data) {
 axios.interceptors.response.use(function (response) {
   // response 响应数据
 //   解构一层响应数据
-  console.log(response)
+  // console.log(response)
   return response.data ? response.data : {}
 }, function (error) {
   // 状态码不是 200/201/204 时进入此函数
