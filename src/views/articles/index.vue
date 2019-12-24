@@ -24,7 +24,7 @@
         </el-col>
         <el-col :span="5">
           <el-select v-model="value" placeholder="请选择">
-            <el-option v-for="item in list" :key="item.value"></el-option>
+            <el-option v-for="item in list" :key="item.value" :value="item.value"></el-option>
           </el-select>
         </el-col>
       </el-row>
@@ -49,16 +49,17 @@
       <div slot="header">
         <template>共找到1000条符合条件的内容</template>
       </div>
-      <el-row class="articleContent">
+      <el-row class="articleContent" v-for="item in list" :key="item.id.toString()">
         <el-col :span="3" class="articleImg">
-          <img src="../../assets/header.jpg" alt style="width:100% " />
+          <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt style="width:100% " />
         </el-col>
         <el-col :span="17">
           <el-row>
             <div class="articleText">
-              <div>假如我年少有为不自卑</div>
-              <el-tag style="width:60px">标签一</el-tag>
-              <div>日期</div>
+              <div>{{ item.title}}</div>
+              <!-- item.status状态为数字 ，需要判断并进行赋值 过滤器-->
+              <el-tag style="width:60px">{{item.status | filterStatus}}</el-tag>
+              <div>{{item.pubdate}}</div>
             </div>
           </el-row>
         </el-col>
@@ -86,15 +87,34 @@ export default {
     return {
       radio: 5,
       list: [],
-      value1: 0
+      value1: 0,
+      value: 0,
+      defaultImg: require('../../assets/header.jpg') // 当没有图片时 显示默认图片
+    }
+  },
+  filters: {
+    filterStatus (val) {
+      switch (val) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        default:
+          break
+      }
     }
   },
   methods: {
     getArticles () {
       this.$axios({
-        url: '/articles'
+        url: '/articles' // 请求地址
       }).then(res => {
         console.log(res)
+        this.list = res.data.results // 文章数据
       })
     }
   },
@@ -141,7 +161,7 @@ export default {
   }
   .articleRight{
       i{
-          margin: 0 10px;
+          margin: 0 15px;
           cursor: pointer;
       }
   }
