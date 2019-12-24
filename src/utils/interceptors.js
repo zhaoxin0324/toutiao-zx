@@ -17,7 +17,7 @@ axios.interceptors.request.use(function (config) {
 })
 // 在响应拦截之前要处理下id失真问题
 axios.defaults.transformResponse = [function (data) {
-  return JSONBig.parse(data) // 用JSONbig.pase替换 JSON.parse 保证数字的正确
+  return data ? JSONBig.parse(data) : {} // 用JSONbig.pase替换 JSON.parse 保证数字的正确
 }]
 // 设置响应拦截
 axios.interceptors.response.use(function (response) {

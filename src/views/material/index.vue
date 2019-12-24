@@ -6,6 +6,11 @@
       <!-- 给面包屑中的插槽赋值 -->
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <el-row type="flex" justify="end">
+        <el-upload :show-file-list="false" :http-request="uploadImg" action="abc">
+            <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
+    </el-row>
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部素材" name="all">
         <!-- 全部素材内容 定制 -->
@@ -13,9 +18,10 @@
           <el-card v-for="item in list" :key="item.id" class="img-card">
             <img :src="item.url" alt />
             <!-- 卡片底部 el-row容易布局-->
+            <!-- v-bind添加class属性 -->
             <el-row class="card-bottom" type="flex" justify="space-around" align="middle">
-              <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i class="el-icon-star-on" :style="{color:item.is_collected ? 'red' : ''}" @click="collectOrCancel(item)" :id="item.id"></i>
+              <i class="el-icon-delete-solid" @click="delImg(item.id)"></i>
             </el-row>
           </el-card>
         </div>
@@ -55,6 +61,7 @@
 export default {
   data () {
     return {
+      losding: false,
       activeName: 'all', // 默认显示全部
       list: [], // 接收数据
       page: {
@@ -65,6 +72,50 @@ export default {
     }
   },
   methods: {
+    // 删除
+    delImg (id) {
+      this.$confirm('确定删除？').then(() => {
+        this.$axios({
+          url: `/user/images/${id}`,
+          method: 'delete'
+        }).then(() => {
+          // 重新拉取
+          this.getMaterial() // 重新加载数据
+        })
+      })
+    },
+    // 收藏或取消
+    collectOrCancel (row) {
+    //  接收每行数据
+      let imgId = row.id
+      this.$axios({
+        url: `/user/images/${imgId}`,
+        method: 'put',
+        data: { collect: !row.is_collected }
+      }).then((res) => {
+        // console.log(res)
+        // let status = res.data.collect ? '收藏' : '取消'
+        // this.$message({
+        //   type: 'success',
+        //   message: `${status}成功`
+        // })
+        this.getMaterial()
+      })
+    },
+    uploadImg (params) {
+      this.loading = true
+      let fd = new FormData()
+      fd.append('image', params.file)
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data: fd
+      }).then((res) => {
+        console.log(res)
+        this.loading = false
+        this.getMaterial()
+      })
+    },
     changePage (newPage) {
       // 改变页码 点击页码发送请求
       this.page.currentPage = newPage
@@ -97,6 +148,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.addColor{
+    color:goldenrod;
+}
 .img-list {
   display: flex;
   flex-wrap: wrap;
