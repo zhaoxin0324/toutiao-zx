@@ -79,7 +79,7 @@
               <i class="el-icon-edit"></i>修改
             </span>
             <span>
-              <i class="el-icon-delete"></i>删除
+              <i class="el-icon-delete" @click="delArticle(item.id)"></i>删除
             </span>
           </el-row>
         </el-col>
@@ -157,6 +157,20 @@ export default {
     }
   },
   methods: {
+    delArticle (id) {
+      this.$confirm('确定删除么?').then(res => {
+        this.$axios({
+          url: `/articles/${id.toString()}`,
+          method: 'delete'
+        }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功！'
+          })
+          this.getConditionArticle() // 再次调用
+        })
+      })
+    },
     changePage (newPage) {
       this.page.currentPage = newPage // 赋值当前页
       this.getConditionArticle()
