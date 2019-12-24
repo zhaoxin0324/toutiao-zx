@@ -172,6 +172,9 @@ export default {
       height: 30px;
       bottom: 0;
       left: 0;
+      i{
+        cursor: pointer
+      }
     }
   }
 }
