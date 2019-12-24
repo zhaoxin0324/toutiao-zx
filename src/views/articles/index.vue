@@ -53,7 +53,7 @@
     </el-card>
     <el-card class="contentList">
       <div slot="header">
-        <template>共找到1000条符合条件的内容</template>
+        <template>共找到{{ page.total }}条符合条件的内容</template>
       </div>
       <el-row class="articleContent" v-for="item in list" :key="item.id.toString()">
         <el-col :span="3" class="articleImg">
@@ -85,6 +85,18 @@
         </el-col>
       </el-row>
     </el-card>
+    <!-- 分页组件 -->
+     <el-row type='flex' justify="center" align="middle" style='height:60px'>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="page.total"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
+        @current-change="changePage"
+        >
+        </el-pagination>
+    </el-row>
   </div>
   <!-- 状态选择区域 -->
 
@@ -99,6 +111,11 @@ export default {
         status: 5,
         channel_id: null,
         dateRange: []
+      },
+      page: {
+        total: 0,
+        pageSize: 10,
+        currentPage: 1
       },
       list: [],
       channels: [],
@@ -140,9 +157,19 @@ export default {
     }
   },
   methods: {
+    changePage (newPage) {
+      this.page.currentPage = newPage // 赋值当前页
+      this.getConditionArticle()
+    },
     changeCondition () {
+      this.page.currentPage = 1
+      this.getConditionArticle()
+    },
+    getConditionArticle () {
     //   alert(this.formData.status)
       let params = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize,
         status: this.formData.status === 5 ? null : this.formData.status, // 不传为全部 没有5这个值 碰到5不传
         channel_id: this.formData.channel_id,
         begin_pubdate: this.formData.dateRange.length ? this.formData.dateRange[0] : null, // 起始时间
@@ -165,6 +192,7 @@ export default {
       }).then(res => {
         console.log(res)
         this.list = res.data.results // 文章数据
+        this.page.total = res.data.total_count
       })
     }
   },
