@@ -9,7 +9,7 @@
           <div class="artStatusList">文章状态:</div>
         </el-col>
         <el-col :span="10">
-          <el-radio-group v-model="radio">
+          <el-radio-group v-model="formData.status" @change="changeCondition">
             <el-radio :label="5">全部</el-radio>
             <el-radio :label="0">草稿</el-radio>
             <el-radio :label="1">待审核</el-radio>
@@ -23,8 +23,12 @@
           <div class="channelList">频道列表:</div>
         </el-col>
         <el-col :span="5">
-          <el-select v-model="value" placeholder="请选择">
-            <el-option v-for="item in list" :key="item.value" :value="item.value"></el-option>
+          <el-select v-model="formData.channel_id" @change="changeCondition">
+              <!-- 循环生成多个el-option
+              label 指的是 el-option显示值
+              value指的是 el-option的存储值
+            -->
+            <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-col>
       </el-row>
@@ -35,7 +39,9 @@
         <el-col :span="8">
           <div class="block">
             <el-date-picker
-              v-model="value1"
+             @change="changeCondition"
+              value-format="yyyy-MM-dd"
+              v-model="formData.dateRange"
               type="daterange"
               range-separator="-"
               start-placeholder="开始日期"
@@ -51,7 +57,11 @@
       </div>
       <el-row class="articleContent" v-for="item in list" :key="item.id.toString()">
         <el-col :span="3" class="articleImg">
-          <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt style="width:100% " />
+          <img
+            :src="item.cover.images.length ? item.cover.images[0] : defaultImg"
+            alt
+            style="width:100% "
+          />
         </el-col>
         <el-col :span="17">
           <el-row>
@@ -85,15 +95,22 @@
 export default {
   data () {
     return {
-      radio: 5,
+      formData: {
+        status: 5,
+        channel_id: null,
+        dateRange: []
+      },
       list: [],
+      channels: [],
       value1: 0,
-      value: 0,
+      value: '请选择',
       defaultImg: require('../../assets/header.jpg') // 当没有图片时 显示默认图片
     }
   },
   filters: {
+
     filterStatus (val) {
+      // 文章状态 0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除
       switch (val) {
         case 0:
           return '草稿'
@@ -106,12 +123,45 @@ export default {
         default:
           break
       }
+    },
+    filterType (val) {
+      switch (val) {
+        case 0:
+          return 'warning'
+        case 1:
+          return 'info'
+        case 2:
+          return ''
+        case 3:
+          return 'danger'
+        default:
+          break
+      }
     }
   },
   methods: {
-    getArticles () {
+    changeCondition () {
+    //   alert(this.formData.status)
+      let params = {
+        status: this.formData.status === 5 ? null : this.formData.status, // 不传为全部 没有5这个值 碰到5不传
+        channel_id: this.formData.channel_id,
+        begin_pubdate: this.formData.dateRange.length ? this.formData.dateRange[0] : null, // 起始时间
+        end_pubdate: this.formData.dateRange.length > 1 ? this.formData.dateRange[1] : null // 结束时间
+      }
+      this.getArticles(params)
+    },
+    //   获取频道列表
+    getChannels () {
       this.$axios({
-        url: '/articles' // 请求地址
+        url: '/channels'
+      }).then(res => {
+        this.channels = res.data.channels
+      })
+    },
+    getArticles (params) {
+      this.$axios({
+        url: '/articles', // 请求地址
+        params
       }).then(res => {
         console.log(res)
         this.list = res.data.results // 文章数据
@@ -120,6 +170,7 @@ export default {
   },
   created () {
     this.getArticles()
+    this.getChannels()
   }
 }
 </script>
@@ -153,17 +204,18 @@ export default {
       }
     }
     .articleText {
+      padding-left: 5px;
       height: 120px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
   }
-  .articleRight{
-      i{
-          margin: 0 15px;
-          cursor: pointer;
-      }
+  .articleRight {
+    i {
+      margin: 0 15px;
+      cursor: pointer;
+    }
   }
 }
 </style>
