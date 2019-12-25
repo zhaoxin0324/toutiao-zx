@@ -75,11 +75,11 @@
         </el-col>
         <el-col :span="4" class="articleRight">
           <el-row type="flex" justify="end">
-            <span>
+            <span >
               <i class="el-icon-edit"></i>修改
             </span>
-            <span>
-              <i class="el-icon-delete" @click="delArticle(item.id)"></i>删除
+            <span @click="delArticle(item.id)">
+              <i class="el-icon-delete" ></i>删除
             </span>
           </el-row>
         </el-col>
