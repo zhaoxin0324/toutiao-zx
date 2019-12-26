@@ -17,6 +17,7 @@
                     <el-radio :label="0">无图</el-radio>
                     <el-radio :label="-1">自动</el-radio>
                 </el-radio-group>
+                {{formData.cover}}
             </el-form-item>
             <el-form-item label="频道" prop="channel_id">
                 <el-select v-model="formData.channel_id" >
@@ -71,6 +72,16 @@ export default {
             images: [] // 存储图片地址
           }
         }
+      }
+    },
+    // 通过type的值 将images数组的长度进行管理
+    'formData.cover.type': function () {
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) { // 无图  数组为空
+        this.formData.cover.images = []
+      } else if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']
       }
     }
   },

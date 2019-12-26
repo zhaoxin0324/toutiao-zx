@@ -26,6 +26,7 @@ axios.interceptors.response.use(function (response) {
   // console.log(response)
   return response.data ? response.data : {}
 }, function (error) {
+  // debugger
   // 状态码不是 200/201/204 时进入此函数
   // 获取状态码，进行响应的提示或处理
   console.log(error)
@@ -50,5 +51,6 @@ axios.interceptors.response.use(function (response) {
       break
   }
   Message({ type: 'warning', message }) // 设置提示信息
+  return Promise.reject(error)
 })
 export default axios

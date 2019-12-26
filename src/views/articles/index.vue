@@ -206,8 +206,7 @@ export default {
       this.$axios({
         url: '/articles', // 请求地址
         params
-      }).then(res => {
-        console.log(res)
+      }).then(res => { // console.log(res)
         this.list = res.data.results // 文章数据
         this.page.total = res.data.total_count
       })
