@@ -80,9 +80,11 @@ export default {
       this.$refs.publishForm.validate(isOK => {
         // 校验成功调用接口
         if (isOK) {
+          // 获取articleId
+          let { articleId } = this.$route.params
           this.$axios({
-            url: '/articles',
-            method: 'post',
+            url: articleId ? `/articles/${articleId}` : '/articles',
+            method: articleId ? 'put' : 'post',
             params: { draft },
             data: this.formData
           }).then(res => {
@@ -99,10 +101,21 @@ export default {
       }).then(res => {
         this.channels = res.data.channels
       })
+    },
+    getArticleById (articleId) {
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(res => {
+        // debugger
+        this.formData = res.data // 将文章数据给到formData 渲染到页面
+      })
     }
   },
   created () {
-    this.getChannels()
+    this.getChannels() // 获取频道数据
+    // 获取id 无id为发布
+    let { articleId } = this.$route.params // 获取动态路由id
+    articleId && this.getArticleById(articleId) // 若有id 通过id获取该篇文章
   }
 }
 </script>
