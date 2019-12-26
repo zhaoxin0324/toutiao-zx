@@ -75,8 +75,8 @@
         </el-col>
         <el-col :span="4" class="articleRight">
           <el-row type="flex" justify="end">
-            <span >
-              <i class="el-icon-edit"></i>修改
+            <span @click="toModify(item.id)">
+              <i class="el-icon-edit" ></i>修改
             </span>
             <span @click="delArticle(item.id)">
               <i class="el-icon-delete" ></i>删除
@@ -157,6 +157,9 @@ export default {
     }
   },
   methods: {
+    toModify (id) {
+      this.$router.push(`/home/publish/${id.toString()}`) // 编程式导航实现页面跳转 跳到发布页面 为区分发布和修改 将文章id添加到地址
+    },
     delArticle (id) {
       this.$confirm('确定删除么?').then(res => {
         this.$axios({

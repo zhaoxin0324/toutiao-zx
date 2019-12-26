@@ -26,7 +26,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="publishArticle()">发布</el-button>
-                <el-button @click="publishArticle(false)">存入草稿</el-button>
+                <el-button @click="publishArticle(true)">存入草稿</el-button>
             </el-form-item>
         </el-form>
     </el-card>
@@ -43,8 +43,8 @@ export default {
         cover: {
           type: 0, // 封面内容
           images: [] // 存储图片地址
-        },
-        channel_id: null // 频道id
+        }
+        // channel_id: null // 频道id
       },
       publishRules: {
         title: [{ required: true, message: '输入标题' }, {
@@ -53,6 +53,25 @@ export default {
         content: [{ required: true, message: '输入内容' }],
         channel_id: [{ required: true, message: '选择频道' }]
       } // 校验规格对象
+    }
+  },
+  watch: {
+    // 监测是发布还是修改 动态路由 $router.params
+    $route (to, form) {
+      // to.params动态参数对象
+      if (Object.keys(to.params).length) {
+
+      } else {
+        // 没有参数=》发布页面=》表单数据为空
+        this.formData = {
+          title: '', // 标题
+          content: '', // 内容
+          cover: {
+            type: 0, // 封面内容
+            images: [] // 存储图片地址
+          }
+        }
+      }
     }
   },
   methods: {
