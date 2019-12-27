@@ -41,7 +41,18 @@ export default {
     }
   },
   methods: {
-    uploadImg () {},
+    uploadImg (params) {
+    //   console.log(params)
+      let data = new FormData()
+      data.append('image', params.file)
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data
+      }).then(res => {
+        this.$emit('imgToCover', res.data.url)
+      })
+    },
     getImgToCover (url) {
       this.$emit('imgToCover', url)
     },
