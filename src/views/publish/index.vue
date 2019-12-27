@@ -26,7 +26,8 @@
         <!-- {{formData.cover}} -->
       </el-form-item>
       <!-- 通过子父传值将images数据传到子组件中 -->
-      <cover-image :list="formData.cover.images"></cover-image>
+      <cover-image :list="formData.cover.images" @imgToPublish="getImgInPublish"></cover-image>
+      <!-- 获取cover-img组件传出的数据 -->
       <el-form-item label="频道" prop="channel_id">
         <el-select v-model="formData.channel_id">
           <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name"></el-option>
@@ -99,6 +100,10 @@ export default {
     // }
   },
   methods: {
+    getImgInPublish (url, index) {
+      // alert(url)
+      this.formData.cover.images.splice(index, 1, url)
+    },
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         // 无图  数组为空

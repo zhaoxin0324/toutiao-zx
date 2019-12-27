@@ -3,6 +3,7 @@ import LayoutHeader from './home/layout-header.vue'
 import BreadCrumb from './common/bread-crumb'
 import { quillEditor } from 'vue-quill-editor'
 import CoverImage from './publish/cover-image'
+import SelectImage from './publish/select-image'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
@@ -13,5 +14,6 @@ export default {
     Vue.component('bread-crumb', BreadCrumb) // 全局注册面包屑组件
     Vue.component('quill-editor', quillEditor)
     Vue.component('cover-image', CoverImage) // 注册一个封面组件
+    Vue.component('select-image', SelectImage)
   }
 }
