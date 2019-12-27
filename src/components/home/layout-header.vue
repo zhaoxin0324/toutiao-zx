@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -37,18 +38,24 @@ export default {
   created () {
     // let token = window.localStorage.getItem('userInfo') // 获取令牌
     // 查询数据
-    this.$axios({
-      url: '/user/profile',
-      methods: 'get'
+    this.getUserInfo()
+    eventBus.$on('updateUserInfo', () => {
+      this.getUserInfo()
+    })
+  },
+  methods: {
+    getUserInfo () {
+      this.$axios({
+        url: '/user/profile',
+        methods: 'get'
       //   headers参数
       // headers: {
       //   Authorization: `Bearer ${token}` 在自定义axios文件中  设置拦截器 添加到请求配置文件config中了
       // }
-    }).then(result => {
-      this.userInfo = result.data // 获取用户个人信息
-    })
-  },
-  methods: {
+      }).then(result => {
+        this.userInfo = result.data // 获取用户个人信息
+      })
+    },
     handle (com) {
       if (com === 'lgout') {
         // 点击退出 清楚本地储存 跳转网页

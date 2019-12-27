@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -74,6 +75,7 @@ export default {
         data
       }).then(res => {
         this.formData.photo = res.data.photo
+        eventBus.$emit('updateUserInfo') // 自定义事件
       })
     },
     //   保存用户信息
@@ -89,6 +91,7 @@ export default {
               type: 'success',
               message: '保存成功'
             })
+            eventBus.$emit('updateUserInfo') // 自定义事件 完成更新触发通知头部组件更换信息
           })
         }
       })
