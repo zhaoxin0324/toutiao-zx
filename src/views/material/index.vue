@@ -111,7 +111,6 @@ export default {
         method: 'post',
         data: fd
       }).then((res) => {
-        console.log(res)
         this.loading = false
         this.getMaterial()
       })
