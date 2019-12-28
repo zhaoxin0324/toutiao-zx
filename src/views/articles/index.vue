@@ -160,19 +160,17 @@ export default {
     toModify (id) {
       this.$router.push(`/home/publish/${id.toString()}`) // 编程式导航实现页面跳转 跳到发布页面 为区分发布和修改 将文章id添加到地址
     },
-    delArticle (id) {
-      this.$confirm('确定删除么?').then(res => {
-        this.$axios({
-          url: `/articles/${id.toString()}`,
-          method: 'delete'
-        }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '删除成功！'
-          })
-          this.getConditionArticle() // 再次调用
-        })
+    async  delArticle (id) {
+      await this.$confirm('确定删除么?')
+      await this.$axios({
+        url: `/articles/${id.toString()}`,
+        method: 'delete'
       })
+      this.$message({
+        type: 'success',
+        message: '删除成功！'
+      })
+      this.getConditionArticle() // 再次调用
     },
     changePage (newPage) {
       this.page.currentPage = newPage // 赋值当前页

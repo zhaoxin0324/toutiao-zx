@@ -65,44 +65,41 @@ export default {
   },
   methods: {
     //   上传头像信息
-    uploadImg (params) {
+    async  uploadImg (params) {
     //   定义表单formData
       let data = new FormData()
       data.append('photo', params.file)
-      this.$axios({
+      let res = await this.$axios({
         url: '/user/photo',
         method: 'patch',
         data
-      }).then(res => {
-        this.formData.photo = res.data.photo
-        eventBus.$emit('updateUserInfo') // 自定义事件
       })
+      this.formData.photo = res.data.photo
+      eventBus.$emit('updateUserInfo') // 自定义事件
     },
     //   保存用户信息
     saveUserInfo () {
-      this.$refs.myForm.validate(isOK => {
+      this.$refs.myForm.validate(async isOK => {
         if (isOK) {
-          this.$axios({
+          await this.$axios({
             url: '/user/profile',
             method: 'patch',
             data: this.formData
-          }).then(res => {
-            this.$message({
-              type: 'success',
-              message: '保存成功'
-            })
-            eventBus.$emit('updateUserInfo') // 自定义事件 完成更新触发通知头部组件更换信息
           })
+          this.$message({
+            type: 'success',
+            message: '保存成功'
+          })
+          eventBus.$emit('updateUserInfo') // 自定义事件 完成更新触发通知头部组件更换信息
         }
       })
     },
     // 获取用户信息
-    getUserInfo () {
-      this.$axios({
+    async  getUserInfo () {
+      let res = await this.$axios({
         url: '/user/profile'
-      }).then(res => {
-        this.formData = res.data
       })
+      this.formData = res.data
     }
   },
   created () {
