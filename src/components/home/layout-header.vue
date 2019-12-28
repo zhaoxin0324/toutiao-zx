@@ -2,7 +2,7 @@
   <!-- layout布局 -->
   <el-row class="layout-header" type="flex" justify="space-between" align="middle">
     <el-col :span="6">
-      <i class="el-icon-s-fold"></i>
+      <i :class="{ 'el-icon-s-unfold':collaspse ,'el-icon-s-fold':!collaspse }" @click="collaspseOrOpen"></i>
       <span class="layout-left">江苏传智播客教育科技股份有限公司</span>
     </el-col>
     <el-col :span="4" class="layout-right">
@@ -31,6 +31,7 @@ import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
+      collaspse: false,
       userInfo: {},
       defaultImg: require('../../assets/header.jpg') // 先把地址转换成变
     }
@@ -44,6 +45,10 @@ export default {
     })
   },
   methods: {
+    collaspseOrOpen () {
+      this.collaspse = !this.collaspse
+      eventBus.$emit('changeCollapse') // 改变折叠 公共实例事件池
+    },
     getUserInfo () {
       this.$axios({
         url: '/user/profile',
