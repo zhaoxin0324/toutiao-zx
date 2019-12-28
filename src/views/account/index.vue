@@ -36,6 +36,7 @@
 
 <script>
 import eventBus from '../../utils/eventBus'
+import { uploadImg, saveUserInfo, getUserInfo } from '../../actions/account.js'
 export default {
   data () {
     return {
@@ -69,11 +70,7 @@ export default {
     //   定义表单formData
       let data = new FormData()
       data.append('photo', params.file)
-      let res = await this.$axios({
-        url: '/user/photo',
-        method: 'patch',
-        data
-      })
+      let res = await uploadImg(data)
       this.formData.photo = res.data.photo
       eventBus.$emit('updateUserInfo') // 自定义事件
     },
@@ -81,11 +78,7 @@ export default {
     saveUserInfo () {
       this.$refs.myForm.validate(async isOK => {
         if (isOK) {
-          await this.$axios({
-            url: '/user/profile',
-            method: 'patch',
-            data: this.formData
-          })
+          await saveUserInfo(this.formData)
           this.$message({
             type: 'success',
             message: '保存成功'
@@ -96,9 +89,7 @@ export default {
     },
     // 获取用户信息
     async  getUserInfo () {
-      let res = await this.$axios({
-        url: '/user/profile'
-      })
+      let res = await getUserInfo()
       this.formData = res.data
     }
   },
