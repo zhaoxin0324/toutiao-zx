@@ -7,6 +7,9 @@ import Home2 from '../views/home/home.vue'
 Vue.use(VueRouter)
 
 const routes = [{
+  path: '*',
+  component: () => import('../components/404.vue')
+}, {
   path: '/',
   redirect: '/login'
 }, {
